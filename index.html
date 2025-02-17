@@ -1,15 +1,24 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>HJF-奋斗日历</title>
+    <title>HJF-班表查询</title>
     <style>
         /* 样式部分保持不变 */
         @keyframes pulse {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.05); }
-            100% { transform: scale(1); }
+            0% {
+                transform: scale(1);
+            }
+
+            50% {
+                transform: scale(1.05);
+            }
+
+            100% {
+                transform: scale(1);
+            }
         }
 
         body {
@@ -28,11 +37,12 @@
             padding: 5px;
             margin-bottom: 20px;
         }
-        .picker{
+
+        .picker {
             background: #EDF2FA;
             padding: 10px !important;
-            border:1px solid #EDF2FA;
-            outline:none;
+            border: 1px solid #EDF2FA;
+            outline: none;
         }
 
         #annual-shift-container {
@@ -46,7 +56,7 @@
             border-collapse: collapse;
             margin: 10px;
             background: white;
-            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
         }
 
         .month-table caption {
@@ -88,13 +98,13 @@
             font-size: 1.1em;
             color: #333;
         }
-        
+
         .selected-date {
             background-color: #F9D8D8 !important;
             position: relative;
             animation: pulse 0.5s ease;
         }
-        
+
         .selected-date::after {
             content: '❤';
             color: #FF6B6B;
@@ -103,14 +113,15 @@
             top: 2px;
             font-size: 12px;
         }
-        .textContent{
+
+        .textContent {
             /* border:1px solid #EDF2FA; */
             padding: 10px;
             font-size: 14px !important;
         }
 
-         /* 新增弹窗样式 */
-         .modal {
+        /* 新增弹窗样式 */
+        .modal {
             display: none;
             position: fixed;
             top: 0;
@@ -127,7 +138,7 @@
             position: relative;
             text-align: center;
             color: #fff;
-          
+
         }
 
         #valentine-text {
@@ -156,9 +167,17 @@
 
         /* 原样式保持不变 */
         @keyframes pulse {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.05); }
-            100% { transform: scale(1); }
+            0% {
+                transform: scale(1);
+            }
+
+            50% {
+                transform: scale(1.05);
+            }
+
+            100% {
+                transform: scale(1);
+            }
         }
 
         body {
@@ -167,9 +186,21 @@
             margin: 20px;
         }
 
-      
+        .close-btn {
+            /* 原有样式保持不变 */
+            z-index: 10001;
+            /* 确保在最上层 */
+            touch-action: manipulation;
+            /* 解决点击延迟问题 */
+        }
+
+        .modal-content canvas {
+            pointer-events: none;
+            /* 防止canvas遮挡点击事件 */
+        }
     </style>
 </head>
+
 <body>
     <!-- 新增情人节弹窗 -->
     <div id="valentine-modal" class="modal">
@@ -184,23 +215,23 @@
     <h3>哥哥的班表💕</h3>
     <label for="date-picker">快速查询日期：</label>
     <input class="picker" type="date" id="date-picker" min="2025-01-01" max="2035-12-31">
-    <div class="textContent" id="shift-result" ></div>
+    <div class="textContent" id="shift-result"></div>
 
     <!-- <canvas id="pinkboard" width="420" height="500"></canvas> -->
-    
+
 
     <div id="annual-shift-container"></div>
-    
+
 
 
     <script>
 
-          // 新增情人节弹窗控制逻辑
-          function checkValentineDay() {
+        // 新增情人节弹窗控制逻辑
+        function checkValentineDay() {
             const today = new Date();
             // 检查是否是2025年2月14日或之后
-            if (today.getFullYear() === 2025 && 
-                today.getMonth() === 1 && 
+            if (today.getFullYear() === 2025 &&
+                today.getMonth() === 1 &&
                 today.getDate() === 14) {
                 showModal();
             }
@@ -218,6 +249,8 @@
 
         // 绑定关闭事件
         document.querySelector('.close-btn').addEventListener('click', closeModal);
+
+
 
         // 在DOM加载完成后检查日期
         window.addEventListener('DOMContentLoaded', () => {
@@ -250,7 +283,7 @@
             '除夕': ["除夕守岁不在家要视频连线哦！等哥哥回家吃年夜饭🏮", "爆竹声中一岁除，哥哥又老一岁啦😝"],
             '春节': ["春节快乐！给我哥哥拜年啦🧧 恭喜发财红包拿来", "新年要更爱你的老婆哦！恭喜发财红包拿来💰"],
             '元宵节': ["元宵节要吃甜甜的汤圆，得大大的元宝💋", "花灯再美也比不上哥哥的眼睛✨"],
-            '情人节': ["情人节快乐喔~ 哥哥，愿我们岁晚青山路，白首期同归✨", "情人节快乐喔~ 哥哥，愿我们岁晚青山路，白首期同归✨"],            '清明节': ["清明时节雨纷纷，你接下一句👩❤️💋👨", "出去踏青赏花把，希望是个好天气呢🌸"],
+            '情人节': ["情人节快乐喔~ 哥哥，愿我们岁晚青山路，白首期同归✨", "情人节快乐喔~ 哥哥，愿我们岁晚青山路，白首期同归✨"], '清明节': ["清明时节雨纷纷，你接下一句👩❤️💋👨", "出去踏青赏花把，希望是个好天气呢🌸"],
             '劳动节': ["劳动最光荣！但今天要好好休息呀💆♂️", "五一假期带我出去玩吧🎡"],
             '纪念日': [`在一起第${Math.floor((new Date() - new Date("2020-05-20")) / 86400000)}天啦～💕,今天的我们是不是去领证了呢，哇喔~ 一直幸福下去`],
             '端午节': ["今天该吃甜甜的粽子啦，上夜班的哥哥今天也要吃粽子喔🎋", "端午节啦，可惜今天要上夜班，留我在家默默过节🩹"],
@@ -270,7 +303,7 @@
             "上班不许看👀漂亮妹妹！不然回家只能吃我一拳",
             "今天又是为小家奋斗的一天呢，加油鸭！🦆",
             "白班虽然辛苦，但有我在等你回家🏠",
-            `猜猜明天什么日子？是我们相遇的第${Math.floor((new Date()-new Date("2020-05-20")))/86400000}天呀～`,
+            `猜猜明天什么日子？是我们相遇的第${Math.floor((new Date() - new Date("2020-05-20"))) / 86400000}天呀～`,
             "我们的口号是发家致富，买别墅，加油鸭！🦆",
             "掐指一算今天又是一个发财的好日子，哇哈哈哈",
             "哥哥，今天工作要是累了，就幻想下我们以后一起环球旅行，瞬间动力满满有没有😜",
@@ -301,7 +334,7 @@
             "你就是工作上的魔法师，总能把复杂的事情变得简单又有趣🧙"
         ];
 
-        const shiftOrder = ['休息', '白班', '夜班', '早班'];
+        const shiftOrder = ['休息','白班', '夜班', '早班', ];
         const startYear = 2025;
         const baseDate = new Date('2025-01-01');
 
@@ -318,13 +351,24 @@
             });
         }
 
-        document.getElementById('date-picker').addEventListener('change', function() {
+        function getShiftForDate(date) {
+            const baseDate = new Date(Date.UTC(2025, 0, 1)); // 2025-01-01 UTC
+            const currentDate = new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate()));
+            let daysDiff = Math.floor((currentDate - baseDate) / (1000 * 60 * 60 * 24));
+
+            // 确保非负数
+            while (daysDiff < 0) {
+                daysDiff += shiftOrder.length;
+            }
+
+            return shiftOrder[daysDiff % shiftOrder.length];
+        }
+        document.getElementById('date-picker').addEventListener('change', function () {
             const selectedDate = new Date(this.value);
+            generateCalendar(selectedDate);
+
             const dateString = this.value;
-            
-            const diffDays = Math.floor((selectedDate - baseDate) / (1000 * 3600 * 24));
-            const shiftIndex = (diffDays % shiftOrder.length + shiftOrder.length) % shiftOrder.length;
-            const shift = shiftOrder[shiftIndex];
+            const shift = getShiftForDate(selectedDate);
 
             updateHighlight(dateString);
 
@@ -334,115 +378,123 @@
             const daysSinceMeeting = Math.floor((new Date() - new Date('2020-05-20')) / 86400000);
             let message = available[randomIndex].replace(/\${days}/g, daysSinceMeeting);
 
-            if(festivals[dateString]) {
+            if (festivals[dateString]) {
                 const festival = festivals[dateString];
                 const wishes = festivalWishes[festival];
-                message = wishes[Math.floor(Math.random()*wishes.length)];
+                message = wishes[Math.floor(Math.random() * wishes.length)];
             }
 
-            document.getElementById('shift-result').innerHTML = 
+            document.getElementById('shift-result').innerHTML =
                 `📅${dateString} 班次：${shift}<br><br>💌${message}`;
         });
 
-        function generateCalendar() {
+        function generateCalendar(selectedDate) {
             const container = document.getElementById('annual-shift-container');
-            let overallDiffDays = 0;
-            
-            for (let month = 0; month < 12; month++) {
-                const table = document.createElement('table');
-                table.className ='month-table';
-
-                const caption = table.createCaption();
-                caption.textContent = new Date(startYear, month).toLocaleDateString('zh-CN', {
-                    year: 'numeric',
-                    month: 'long'
-                });
-
-                const headerRow = table.insertRow();
-                ['日', '一', '二', '三', '四', '五', '六'].forEach(day => {
-                    const th = document.createElement('th');
-                    th.textContent = day;
-                    headerRow.appendChild(th);
-                });
-
-                const firstDay = new Date(startYear, month, 1);
-                const lastDay = new Date(startYear, month + 1, 0);
-                let currentDate = new Date(firstDay);
-
-                let row = table.insertRow();
-
-                for (let i = 0; i < firstDay.getDay(); i++) {
-                    row.insertCell();
-                }
-
-                while (currentDate <= lastDay) {
-                    if (row.cells.length === 7) {
-                        row = table.insertRow();
-                    }
-
-                    const cell = row.insertCell();
-                    const day = currentDate.getDate();
-                    const shiftIndex = overallDiffDays % shiftOrder.length; 
-                    const shift = shiftOrder[shiftIndex];
-
-                    if ([0, 6].includes(currentDate.getDay())) {
-                        cell.classList.add('weekend');
-                    }
-
-                    // 修复日期生成逻辑
-                    const year = currentDate.getFullYear();
-                    const m = String(currentDate.getMonth() + 1).padStart(2, '0');
-                    const d = String(currentDate.getDate()).padStart(2, '0');
-                    const dateStr = `${year}-${m}-${d}`;
-                    cell.dataset.date = dateStr;
-
-                    cell.innerHTML = `
-                        <div>${day}</div>
-                        <div class="shift">${shift}</div>
-                    `;
-
-                    currentDate.setDate(currentDate.getDate() + 1);
-                    overallDiffDays++;
-                }
-
-                while (row.cells.length < 7) {
-                    row.insertCell();
-                }
-
-                container.appendChild(table);
+            // 清空原有的日历表格
+            while (container.firstChild) {
+                container.removeChild(container.firstChild);
             }
+
+            const year = selectedDate.getFullYear();
+            const month = selectedDate.getMonth();
+
+            const table = document.createElement('table');
+            table.className = 'month-table';
+
+            const caption = table.createCaption();
+            caption.textContent = new Date(year, month).toLocaleDateString('zh-CN', {
+                year: 'numeric',
+                month: 'long'
+            });
+
+            const headerRow = table.insertRow();
+            ['日', '一', '二', '三', '四', '五', '六'].forEach(day => {
+                const th = document.createElement('th');
+                th.textContent = day;
+                headerRow.appendChild(th);
+            });
+
+            const firstDay = new Date(year, month, 1);
+            const lastDay = new Date(year, month + 1, 0);
+            let currentDate = new Date(firstDay);
+            const baseDate = new Date('2025-01-01');
+            let overallDiffDays = Math.floor((firstDay - baseDate) / (1000 * 3600 * 24));
+
+            // 确保overallDiffDays为非负数
+            if (overallDiffDays < 0) {
+                overallDiffDays += Math.ceil(-overallDiffDays / shiftOrder.length) * shiftOrder.length;
+            }
+
+            let row = table.insertRow();
+
+            for (let i = 0; i < firstDay.getDay(); i++) {
+                row.insertCell();
+            }
+
+            while (currentDate <= lastDay) {
+                if (row.cells.length === 7) {
+                    row = table.insertRow();
+                }
+
+                const cell = row.insertCell();
+                const day = currentDate.getDate();
+                const shift = getShiftForDate(currentDate); // 使用统一的班次计算函数
+
+                if ([0, 6].includes(currentDate.getDay())) {
+                    cell.classList.add('weekend');
+                }
+
+                const yearStr = currentDate.getFullYear();
+                const m = String(currentDate.getMonth() + 1).padStart(2, '0');
+                const d = String(currentDate.getDate()).padStart(2, '0');
+                const dateStr = `${yearStr}-${m}-${d}`;
+                cell.dataset.date = dateStr;
+
+                cell.innerHTML = `
+            <div>${day}</div>
+            <div class="shift">${shift}</div>
+        `;
+
+                currentDate.setDate(currentDate.getDate() + 1);
+            }
+
+            while (row.cells.length < 7) {
+                row.insertCell();
+            }
+
+            container.appendChild(table);
         }
 
+
         window.addEventListener('DOMContentLoaded', () => {
-            generateCalendar();
-            
             const today = new Date();
             const minDate = new Date('2025-01-01');
             const defaultDate = today >= minDate ? today : minDate;
+            generateCalendar(defaultDate);
+
             const dateString = defaultDate.toISOString().split('T')[0];
-            
             document.getElementById('date-picker').value = dateString;
             document.getElementById('date-picker').dispatchEvent(new Event('change'));
-            // showModal()
         });
+
     </script>
 
-<!-- 弹窗特效 -->
-<script>
-    /*
-     * Settings
-     */
-    // var settings = {
-    //     particles: {
-    //         length: 500, // maximum amount of particles
-    //         duration: 2, // particle duration in sec
-    //         velocity: 100, // particle velocity in pixels/sec
-    //         effect: -0.75, // play with this for a nice effect
-    //         size: 30, // particle size in pixels
-    //     },
-    // };
+    <!-- 弹窗特效 -->
+    <script>
+        /*
+         * Settings
+         */
+        // var settings = {
+        //     particles: {
+        //         length: 500, // maximum amount of particles
+        //         duration: 2, // particle duration in sec
+        //         velocity: 100, // particle velocity in pixels/sec
+        //         effect: -0.75, // play with this for a nice effect
+        //         size: 30, // particle size in pixels
+        //     },
+        // };
 
-    var settings = {
+        var settings = {
             particles: {
                 length: 500,  // 增加粒子数量
                 duration: 3,   // 延长粒子持续时间
@@ -451,282 +503,283 @@
                 size: 30,      // 增大粒子尺寸
             },
         };
- 
-    /*
-     * RequestAnimationFrame polyfill by Erik M?ller
-     */
-    (function () {
-        var b = 0;
-        var c = ["ms", "moz", "webkit", "o"];
-        for (var a = 0; a < c.length && !window.requestAnimationFrame; ++a) {
-            window.requestAnimationFrame = window[c[a] + "RequestAnimationFrame"];
-            window.cancelAnimationFrame =
-                window[c[a] + "CancelAnimationFrame"] ||
-                window[c[a] + "CancelRequestAnimationFrame"];
-        }
-        if (!window.requestAnimationFrame) {
-            window.requestAnimationFrame = function (h, e) {
-                var d = new Date().getTime();
-                var f = Math.max(0, 16 - (d - b));
-                var g = window.setTimeout(function () {
-                    h(d + f);
-                }, f);
-                b = d + f;
-                return g;
-            };
-        }
-        if (!window.cancelAnimationFrame) {
-            window.cancelAnimationFrame = function (d) {
-                clearTimeout(d);
-            };
-        }
-    })();
- 
-    /*
-     * Point class
-     */
-    var Point = (function () {
-        function Point(x, y) {
-            this.x = typeof x !== "undefined" ? x : 0;
-            this.y = typeof y !== "undefined" ? y : 0;
-        }
- 
-        Point.prototype.clone = function () {
-            return new Point(this.x, this.y);
-        };
-        Point.prototype.length = function (length) {
-            if (typeof length == "undefined")
-                return Math.sqrt(this.x * this.x + this.y * this.y);
-            this.normalize();
-            this.x *= length;
-            this.y *= length;
-            return this;
-        };
-        Point.prototype.normalize = function () {
-            var length = this.length();
-            this.x /= length;
-            this.y /= length;
-            return this;
-        };
-        return Point;
-    })();
- 
-    /*
-     * Particle class
-     */
- 
-    var Particle = (function () {
-        function Particle() {
-            this.position = new Point();
-            this.velocity = new Point();
-            this.acceleration = new Point();
-            this.age = 0;
-        }
- 
-        Particle.prototype.initialize = function (x, y, dx, dy) {
-            this.position.x = x;
-            this.position.y = y;
-            this.velocity.x = dx;
-            this.velocity.y = dy;
-            this.acceleration.x = dx * settings.particles.effect;
-            this.acceleration.y = dy * settings.particles.effect;
-            this.age = 0;
-        };
-        Particle.prototype.update = function (deltaTime) {
-            this.position.x += this.velocity.x * deltaTime;
-            this.position.y += this.velocity.y * deltaTime;
-            this.velocity.x += this.acceleration.x * deltaTime;
-            this.velocity.y += this.acceleration.y * deltaTime;
-            this.age += deltaTime;
-        };
-        Particle.prototype.draw = function (context, image) {
-            function ease(t) {
-                return --t * t * t + 1;
+
+        /*
+         * RequestAnimationFrame polyfill by Erik M?ller
+         */
+        (function () {
+            var b = 0;
+            var c = ["ms", "moz", "webkit", "o"];
+            for (var a = 0; a < c.length && !window.requestAnimationFrame; ++a) {
+                window.requestAnimationFrame = window[c[a] + "RequestAnimationFrame"];
+                window.cancelAnimationFrame =
+                    window[c[a] + "CancelAnimationFrame"] ||
+                    window[c[a] + "CancelRequestAnimationFrame"];
             }
- 
-            var size = image.width * ease(this.age / settings.particles.duration);
-            context.globalAlpha = 1 - this.age / settings.particles.duration;
-            context.drawImage(
-                image,
-                this.position.x - size / 2,
-                this.position.y - size / 2,
-                size,
-                size
-            );
-        };
-        return Particle;
-    })();
- 
-    /*
-     * ParticlePool class
-     */
-    var ParticlePool = (function () {
-        var particles,
-            firstActive = 0,
-            firstFree = 0,
-            duration = settings.particles.duration;
- 
-        function ParticlePool(length) {
-            // create and populate particle pool
-            particles = new Array(length);
-            for (var i = 0; i < particles.length; i++)
-                particles[i] = new Particle();
-        }
- 
-        ParticlePool.prototype.add = function (x, y, dx, dy) {
-            particles[firstFree].initialize(x, y, dx, dy);
- 
-            // handle circular queue
-            firstFree++;
-            if (firstFree == particles.length) firstFree = 0;
-            if (firstActive == firstFree) firstActive++;
-            if (firstActive == particles.length) firstActive = 0;
-        };
-        ParticlePool.prototype.update = function (deltaTime) {
-            var i;
- 
-            // update active particles
-            if (firstActive < firstFree) {
-                for (i = firstActive; i < firstFree; i++)
-                    particles[i].update(deltaTime);
+            if (!window.requestAnimationFrame) {
+                window.requestAnimationFrame = function (h, e) {
+                    var d = new Date().getTime();
+                    var f = Math.max(0, 16 - (d - b));
+                    var g = window.setTimeout(function () {
+                        h(d + f);
+                    }, f);
+                    b = d + f;
+                    return g;
+                };
             }
-            if (firstFree < firstActive) {
-                for (i = firstActive; i < particles.length; i++)
-                    particles[i].update(deltaTime);
-                for (i = 0; i < firstFree; i++) particles[i].update(deltaTime);
+            if (!window.cancelAnimationFrame) {
+                window.cancelAnimationFrame = function (d) {
+                    clearTimeout(d);
+                };
             }
- 
-            // remove inactive particles
-            while (
-                particles[firstActive].age >= duration &&
-                firstActive != firstFree
-                ) {
-                firstActive++;
-                if (firstActive == particles.length) firstActive = 0;
-            }
-        };
-        ParticlePool.prototype.draw = function (context, image) {
-            // draw active particles
-            if (firstActive < firstFree) {
-                for (i = firstActive; i < firstFree; i++)
-                    particles[i].draw(context, image);
-            }
-            if (firstFree < firstActive) {
-                for (i = firstActive; i < particles.length; i++)
-                    particles[i].draw(context, image);
-                for (i = 0; i < firstFree; i++) particles[i].draw(context, image);
-            }
-        };
-        return ParticlePool;
-    })();
- 
-    /*
-     * Putting it all together
-     */
-    (function (canvas) {
-        var context = canvas.getContext("2d"),
-            particles = new ParticlePool(settings.particles.length),
-            particleRate =
-                settings.particles.length / settings.particles.duration, // particles/sec
-            time;
- 
-        // get point on heart with -PI <= t <= PI
-        function pointOnHeart(t) {
-            return new Point(
-                160 * Math.pow(Math.sin(t), 3),
-                130 * Math.cos(t) -
-                50 * Math.cos(2 * t) -
-                20 * Math.cos(3 * t) -
-                10 * Math.cos(4 * t) +
-                25
-            );
-        }
- 
-        // creating the particle image using a dummy canvas
-        var image = (function () {
-            var canvas = document.createElement("canvas"),
-                context = canvas.getContext("2d");
-            canvas.width = settings.particles.size;
-            canvas.height = settings.particles.size;
- 
-            // helper function to create the path
-            function to(t) {
-                var point = pointOnHeart(t);
-                point.x =
-                    settings.particles.size / 2 +
-                    (point.x * settings.particles.size) / 350;
-                point.y =
-                    settings.particles.size / 2 -
-                    (point.y * settings.particles.size) / 350;
-                return point;
-            }
- 
-            // create the path
-            context.beginPath();
-            var t = -Math.PI;
-            var point = to(t);
-            context.moveTo(point.x, point.y);
-            while (t < Math.PI) {
-                t += 0.01; // baby steps!
-                point = to(t);
-                context.lineTo(point.x, point.y);
-            }
-            context.closePath();
-            // create the fill
-            context.fillStyle = "#ea80b0";
-            context.fill();
-            // create the image
-            var image = new Image();
-            image.src = canvas.toDataURL();
-            return image;
         })();
- 
-        // render that thing!
-        function render() {
-            // next animation frame
-            requestAnimationFrame(render);
- 
-            // update time
-            var newTime = new Date().getTime() / 1000,
-                deltaTime = newTime - (time || newTime);
-            time = newTime;
- 
-            // clear canvas
-            context.clearRect(0, 0, canvas.width, canvas.height);
- 
-            // create new particles
-            var amount = particleRate * deltaTime;
-            for (var i = 0; i < amount; i++) {
-                var pos = pointOnHeart(Math.PI - 2 * Math.PI * Math.random());
-                var dir = pos.clone().length(settings.particles.velocity);
-                particles.add(
-                    canvas.width / 2 + pos.x,
-                    canvas.height / 2 - pos.y,
-                    dir.x,
-                    -dir.y
+
+        /*
+         * Point class
+         */
+        var Point = (function () {
+            function Point(x, y) {
+                this.x = typeof x !== "undefined" ? x : 0;
+                this.y = typeof y !== "undefined" ? y : 0;
+            }
+
+            Point.prototype.clone = function () {
+                return new Point(this.x, this.y);
+            };
+            Point.prototype.length = function (length) {
+                if (typeof length == "undefined")
+                    return Math.sqrt(this.x * this.x + this.y * this.y);
+                this.normalize();
+                this.x *= length;
+                this.y *= length;
+                return this;
+            };
+            Point.prototype.normalize = function () {
+                var length = this.length();
+                this.x /= length;
+                this.y /= length;
+                return this;
+            };
+            return Point;
+        })();
+
+        /*
+         * Particle class
+         */
+
+        var Particle = (function () {
+            function Particle() {
+                this.position = new Point();
+                this.velocity = new Point();
+                this.acceleration = new Point();
+                this.age = 0;
+            }
+
+            Particle.prototype.initialize = function (x, y, dx, dy) {
+                this.position.x = x;
+                this.position.y = y;
+                this.velocity.x = dx;
+                this.velocity.y = dy;
+                this.acceleration.x = dx * settings.particles.effect;
+                this.acceleration.y = dy * settings.particles.effect;
+                this.age = 0;
+            };
+            Particle.prototype.update = function (deltaTime) {
+                this.position.x += this.velocity.x * deltaTime;
+                this.position.y += this.velocity.y * deltaTime;
+                this.velocity.x += this.acceleration.x * deltaTime;
+                this.velocity.y += this.acceleration.y * deltaTime;
+                this.age += deltaTime;
+            };
+            Particle.prototype.draw = function (context, image) {
+                function ease(t) {
+                    return --t * t * t + 1;
+                }
+
+                var size = image.width * ease(this.age / settings.particles.duration);
+                context.globalAlpha = 1 - this.age / settings.particles.duration;
+                context.drawImage(
+                    image,
+                    this.position.x - size / 2,
+                    this.position.y - size / 2,
+                    size,
+                    size
+                );
+            };
+            return Particle;
+        })();
+
+        /*
+         * ParticlePool class
+         */
+        var ParticlePool = (function () {
+            var particles,
+                firstActive = 0,
+                firstFree = 0,
+                duration = settings.particles.duration;
+
+            function ParticlePool(length) {
+                // create and populate particle pool
+                particles = new Array(length);
+                for (var i = 0; i < particles.length; i++)
+                    particles[i] = new Particle();
+            }
+
+            ParticlePool.prototype.add = function (x, y, dx, dy) {
+                particles[firstFree].initialize(x, y, dx, dy);
+
+                // handle circular queue
+                firstFree++;
+                if (firstFree == particles.length) firstFree = 0;
+                if (firstActive == firstFree) firstActive++;
+                if (firstActive == particles.length) firstActive = 0;
+            };
+            ParticlePool.prototype.update = function (deltaTime) {
+                var i;
+
+                // update active particles
+                if (firstActive < firstFree) {
+                    for (i = firstActive; i < firstFree; i++)
+                        particles[i].update(deltaTime);
+                }
+                if (firstFree < firstActive) {
+                    for (i = firstActive; i < particles.length; i++)
+                        particles[i].update(deltaTime);
+                    for (i = 0; i < firstFree; i++) particles[i].update(deltaTime);
+                }
+
+                // remove inactive particles
+                while (
+                    particles[firstActive].age >= duration &&
+                    firstActive != firstFree
+                ) {
+                    firstActive++;
+                    if (firstActive == particles.length) firstActive = 0;
+                }
+            };
+            ParticlePool.prototype.draw = function (context, image) {
+                // draw active particles
+                if (firstActive < firstFree) {
+                    for (i = firstActive; i < firstFree; i++)
+                        particles[i].draw(context, image);
+                }
+                if (firstFree < firstActive) {
+                    for (i = firstActive; i < particles.length; i++)
+                        particles[i].draw(context, image);
+                    for (i = 0; i < firstFree; i++) particles[i].draw(context, image);
+                }
+            };
+            return ParticlePool;
+        })();
+
+        /*
+         * Putting it all together
+         */
+        (function (canvas) {
+            var context = canvas.getContext("2d"),
+                particles = new ParticlePool(settings.particles.length),
+                particleRate =
+                    settings.particles.length / settings.particles.duration, // particles/sec
+                time;
+
+            // get point on heart with -PI <= t <= PI
+            function pointOnHeart(t) {
+                return new Point(
+                    160 * Math.pow(Math.sin(t), 3),
+                    130 * Math.cos(t) -
+                    50 * Math.cos(2 * t) -
+                    20 * Math.cos(3 * t) -
+                    10 * Math.cos(4 * t) +
+                    25
                 );
             }
- 
-            // update and draw particles
-            particles.update(deltaTime);
-            particles.draw(context, image);
-        }
- 
-        // handle (re-)sizing of the canvas
-        function onResize() {
-            canvas.width = canvas.clientWidth;
-            canvas.height = canvas.clientHeight;
-        }
- 
-        window.onresize = onResize;
- 
-        // delay rendering bootstrap
-        setTimeout(function () {
-            onResize();
-            render();
-        }, 10);
-    })(document.getElementById("pinkboard"));
- 
-</script>
+
+            // creating the particle image using a dummy canvas
+            var image = (function () {
+                var canvas = document.createElement("canvas"),
+                    context = canvas.getContext("2d");
+                canvas.width = settings.particles.size;
+                canvas.height = settings.particles.size;
+
+                // helper function to create the path
+                function to(t) {
+                    var point = pointOnHeart(t);
+                    point.x =
+                        settings.particles.size / 2 +
+                        (point.x * settings.particles.size) / 350;
+                    point.y =
+                        settings.particles.size / 2 -
+                        (point.y * settings.particles.size) / 350;
+                    return point;
+                }
+
+                // create the path
+                context.beginPath();
+                var t = -Math.PI;
+                var point = to(t);
+                context.moveTo(point.x, point.y);
+                while (t < Math.PI) {
+                    t += 0.01; // baby steps!
+                    point = to(t);
+                    context.lineTo(point.x, point.y);
+                }
+                context.closePath();
+                // create the fill
+                context.fillStyle = "#ea80b0";
+                context.fill();
+                // create the image
+                var image = new Image();
+                image.src = canvas.toDataURL();
+                return image;
+            })();
+
+            // render that thing!
+            function render() {
+                // next animation frame
+                requestAnimationFrame(render);
+
+                // update time
+                var newTime = new Date().getTime() / 1000,
+                    deltaTime = newTime - (time || newTime);
+                time = newTime;
+
+                // clear canvas
+                context.clearRect(0, 0, canvas.width, canvas.height);
+
+                // create new particles
+                var amount = particleRate * deltaTime;
+                for (var i = 0; i < amount; i++) {
+                    var pos = pointOnHeart(Math.PI - 2 * Math.PI * Math.random());
+                    var dir = pos.clone().length(settings.particles.velocity);
+                    particles.add(
+                        canvas.width / 2 + pos.x,
+                        canvas.height / 2 - pos.y,
+                        dir.x,
+                        -dir.y
+                    );
+                }
+
+                // update and draw particles
+                particles.update(deltaTime);
+                particles.draw(context, image);
+            }
+
+            // handle (re-)sizing of the canvas
+            function onResize() {
+                canvas.width = canvas.clientWidth;
+                canvas.height = canvas.clientHeight;
+            }
+
+            window.onresize = onResize;
+
+            // delay rendering bootstrap
+            setTimeout(function () {
+                onResize();
+                render();
+            }, 10);
+        })(document.getElementById("pinkboard"));
+
+    </script>
 </body>
+
 </html>
